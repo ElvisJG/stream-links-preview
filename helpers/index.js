@@ -1,3 +1,5 @@
+const og = require("open-graph");
+
 const pipe = (fn, ...fns) => (...args) =>
   fns.reduce((prev, nextFn) => nextFn(prev), fn(...args));
 
@@ -7,6 +9,19 @@ const trace = fn => args => {
 };
 
 const urlRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim;
+
+const handleEmit = (urls, socket, bst) => {
+  urls
+    .filter(url => !bst.contains(url))
+    .forEach(command => {
+      bst.insert(command);
+      og(command, (err, meta) => {
+        if (!err && meta !== undefined) {
+          socket.emit("message", meta);
+        }
+      });
+    });
+};
 
 const BinarySearchTree = url => {
   let value = url;
@@ -56,5 +71,6 @@ module.exports = {
   pipe,
   trace,
   urlRegex,
+  handleEmit,
   BinarySearchTree
 };

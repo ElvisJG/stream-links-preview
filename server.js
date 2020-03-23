@@ -3,7 +3,9 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const http = require("http");
+const tmi = require("tmi.js");
 const socketIO = require("socket.io");
+const { urlRegex, handleEmit, BinarySearchTree } = require("./helpers");
 
 const app = express();
 app.use(helmet());
@@ -13,14 +15,29 @@ app.use(morgan("tiny"));
 const server = http.createServer(app);
 const io = socketIO(server);
 
+const client = new tmi.Client({
+  identity: {
+    username: process.env.USERNAME,
+    password: process.env.PASSWORD
+  },
+  channels: [process.env.STREAM]
+});
+
+client.connect();
+
+app.get("/", function(req, res) {
+  res.sendFile(__dirname + "/index.html");
+});
+
 io.on("connection", socket => {
-  console.log("New client connected");
+  const search = BinarySearchTree("");
 
-  socket.on("Incoming Data", data => {
-    socket.broadcast.emit("outgoing data", { num: data });
+  client.on("message", (channel, tags, message, self) => {
+    const commandName = message.match(urlRegex);
+    if (commandName) {
+      handleEmit(commandName, socket, search);
+    }
   });
-
-  socket.on("disconnect", () => console.log("Client disconnected"));
 });
 
 module.exports = server;
