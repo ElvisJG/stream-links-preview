@@ -33,6 +33,7 @@ io.on("connection", socket => {
   const search = BinarySearchTree("");
 
   client.on("message", (channel, tags, message, self) => {
+    if (self) return;
     const commandName = message.match(urlRegex);
     if (commandName) {
       handleEmit(commandName, socket, search);
