@@ -17,8 +17,7 @@ const handleEmit = (urls, socket, bst) => {
       bst.insert(command);
       og(command, (err, meta) => {
         if (!err && meta !== undefined) {
-          socket.emit("message", meta);
-          console.log(meta);
+          socket.emit("message", { ...meta, url: command });
         }
       });
     });

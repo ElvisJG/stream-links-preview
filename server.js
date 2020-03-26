@@ -20,7 +20,8 @@ const client = new tmi.Client({
     username: process.env.USERNAME,
     password: process.env.PASSWORD
   },
-  channels: [process.env.STREAM]
+  // channels: [process.env.STREAM]
+  channels: ["picashii"]
 });
 
 client.connect();
