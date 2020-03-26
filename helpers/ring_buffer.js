@@ -1,7 +1,5 @@
 const listNode = (value, prev = null, next = null) => {
   let v = value;
-  let prev;
-  let next;
 
   const insert_after = v => {
     let current_next = next;
@@ -139,11 +137,12 @@ const DoublyLinkedList = (node = null) => {
     max
   };
 };
-const RingBuffer = capacity => {
+export const RingBuffer = capacity => {
   let cap = capacity;
-  let current;
   let storage = DoublyLinkedList();
-  let len = storage.__len__;
+  let len = storage.__len__();
+  console.log(len);
+  console.log(cap);
 
   const append = item => {
     if (len < cap) {

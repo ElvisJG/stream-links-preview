@@ -1,0 +1,52 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+h1 {
+  font-size: 2rem;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+input {
+  max-width: 400px;
+  width: 100%;
+  margin-bottom: 1rem;
+  height: 25px;
+  border-radius: 12px;
+  outline: none;
+  font-size: 1.5rem;
+  color: #6441a5;
+  border: 2px solid #6441a5;
+  padding: 0.5rem;
+}
+button {
+  color: white;
+  background-color: #6441a5;
+  outline: none;
+  border: none;
+  width: 150px;
+  height: 50px;
+  font-size: 2rem;
+  border-radius: 12px;
+}
+button:hover {
+  color: #6441a5;
+  background-color: white;
+  border: 2px solid #6441a5;
+  border-radius: 12px;
+}
+.bg-text {
+  font-size: 10rem;
+  color: #6441a550;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

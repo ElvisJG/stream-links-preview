@@ -26,10 +26,6 @@ const client = new tmi.Client({
 
 client.connect();
 
-app.get("/", function(req, res) {
-  res.sendFile(__dirname + "/index.html");
-});
-
 io.on("connection", socket => {
   const search = BinarySearchTree("");
 
