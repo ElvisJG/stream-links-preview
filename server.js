@@ -19,23 +19,24 @@ const client = new tmi.Client({
   identity: {
     username: process.env.USERNAME,
     password: process.env.PASSWORD
-  },
-  // channels: [process.env.STREAM]
-  channels: ["picashii"]
+  }
 });
 
-client.connect();
-
 io.on("connection", socket => {
-  const search = BinarySearchTree("");
-
-  client.on("message", (channel, tags, message, self) => {
-    if (self) return;
-    const commandName = message.match(urlRegex);
-    if (commandName) {
-      handleEmit(commandName, socket, search);
-    }
+  socket.on("channel", channelName => {
+    client.connect().then(() => {
+      client.join(channelName);
+    });
   });
+});
+
+const search = BinarySearchTree("");
+client.on("message", (channel, tags, message, self) => {
+  if (self) return;
+  const commandName = message.match(urlRegex);
+  if (commandName) {
+    handleEmit(commandName, io, search);
+  }
 });
 
 module.exports = server;

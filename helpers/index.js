@@ -1,4 +1,4 @@
-const og = require("open-graph");
+const ogs = require("open-graph-scraper");
 
 const pipe = (fn, ...fns) => (...args) =>
   fns.reduce((prev, nextFn) => nextFn(prev), fn(...args));
@@ -10,16 +10,14 @@ const trace = fn => args => {
 
 const urlRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim;
 
-const handleEmit = (urls, socket, bst) => {
+const handleEmit = (urls, io, bst) => {
   urls
     .filter(url => !bst.contains(url))
     .forEach(command => {
       bst.insert(command);
-      og(command, (err, meta) => {
-        if (!err && meta !== undefined) {
-          socket.emit("message", { ...meta, url: command });
-        }
-      });
+      ogs({ url: command })
+        .then(result => io.emit("message", result))
+        .catch(error => console.log("error", error));
     });
 };
 
