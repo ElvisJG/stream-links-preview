@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import io from "socket.io-client";
 import { useForm } from "react-hook-form";
 import Preview from "../components/Preview";
-import data from "./mockdata.json";
+import ConnectedTo from "../components/ConnectedTo";
+import mockdata from "./mockdata.json";
 
 const HomePage = () => {
   const [stream, setStream] = useState([]);
@@ -25,15 +26,11 @@ const HomePage = () => {
   //   io("http://localhost:4321").on("message", e => handleMetaData(e));
   // }, []);
 
-  const handleMeta = metaData => {
-    const data = metaData[0];
-    const latest = metaData[0].pop();
-    latest.length >= 1 && setMeta(m => m.push(latest));
-    setMeta(m => m.concat(data));
-    setLatest(latest);
-  };
   useEffect(() => {
-    handleMeta(data);
+    const latest = mockdata[0].pop();
+    latest.length >= 1 && setMeta(m => m.push(latest.pop()));
+    setMeta(m => m.concat(mockdata[0]));
+    setLatest(latest);
   }, []);
 
   return (
@@ -45,9 +42,8 @@ const HomePage = () => {
           <button type="submit">Submit</button>
         </form>
       </div>
-      {meta && stream && (
-        <Preview meta={meta} stream={stream} latest={latest} />
-      )}
+      {!stream.length >= 1 && <ConnectedTo stream={["Test Stream"]} />}
+      <Preview meta={meta} stream={stream} latest={latest} />
     </div>
   );
 };
