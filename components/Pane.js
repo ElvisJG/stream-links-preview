@@ -1,9 +1,9 @@
 import React from "react";
 
-const Pane = ({ data }) => {
+const Pane = ({ metaData }) => {
   return (
     <>
-      {data.map(m => {
+      {metaData.map(m => {
         const { data } = m;
         <div className="pane" key={data.ogUrl}>
           <a href={data.ogUrl} target="_blank" rel="noopener noreferrer">

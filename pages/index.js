@@ -25,15 +25,19 @@ const HomePage = () => {
   //   io("http://localhost:4321").on("message", e => handleMetaData(e));
   // }, []);
 
+  const handleMeta = metaData => {
+    const data = metaData[0];
+    const latest = metaData[0].pop();
+    latest.length >= 1 && setMeta(m => m.push(latest));
+    setMeta(m => m.concat(data));
+    setLatest(latest);
+  };
   useEffect(() => {
-    setMeta(m => m.concat(data[0]));
-    console.log("meta", meta);
-    // setLatest();
-    // console.log("slice", meta.slice(0, -1));
+    handleMeta(data);
   }, []);
 
   return (
-    <div className="page">
+    <div className="app">
       <div className="search">
         <h1>Twitch Links</h1>
         <form onSubmit={handleSubmit(onSubmit)} className="form">
@@ -41,7 +45,9 @@ const HomePage = () => {
           <button type="submit">Submit</button>
         </form>
       </div>
-      {meta && stream && <Preview m={meta} s={stream} l={latest} />}
+      {meta && stream && (
+        <Preview meta={meta} stream={stream} latest={latest} />
+      )}
     </div>
   );
 };

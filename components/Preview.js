@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import ConnectedTo from "./ConnectedTo";
 import LatestPane from "./LatestPane";
 import Pane from "./Pane";
 
-const Preview = ({ m, s, l }) => {
+const Preview = ({ meta, stream, latest }) => {
   return (
     <div className="pane-container">
       <ConnectedTo stream={["Test Stream"]} />
       <div className="preview_pane">
-        {/* <LatestPane data={l} /> */}
-        <Pane data={m} />
+        <LatestPane metaData={latest} />
+        <Pane metaData={meta} />
       </div>
     </div>
   );
