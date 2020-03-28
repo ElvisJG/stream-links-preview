@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import io from "socket.io-client";
 import { useForm } from "react-hook-form";
 import Preview from "../components/Preview";
-import ConnectedTo from "../components/ConnectedTo";
 import data from "./mockdata.json";
 
 const HomePage = () => {
   const [stream, setStream] = useState([]);
   const [meta, setMeta] = useState([]);
+  const [latest, setLatest] = useState({});
   const { handleSubmit, register, reset } = useForm();
 
   const onSubmit = values => {
@@ -20,9 +20,16 @@ const HomePage = () => {
     reset("");
   };
 
-  const handleMetaData = meta => setMeta(m => m.concat(meta));
+  // const handleMetaData = meta => setMeta(m => m.concat(meta));
+  // useEffect(() => {
+  //   io("http://localhost:4321").on("message", e => handleMetaData(e));
+  // }, []);
+
   useEffect(() => {
-    io("http://localhost:4321").on("message", e => handleMetaData(e));
+    setMeta(m => m.concat(data[0]));
+    console.log("meta", meta);
+    // setLatest();
+    // console.log("slice", meta.slice(0, -1));
   }, []);
 
   return (
@@ -32,11 +39,9 @@ const HomePage = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="form">
           <input name="channel" ref={register} />
           <button type="submit">Submit</button>
-          <ConnectedTo stream={stream} />
         </form>
       </div>
-
-      <div className="preview_pane">{meta && <Preview meta={meta} />}</div>
+      {meta && stream && <Preview m={meta} s={stream} l={latest} />}
     </div>
   );
 };

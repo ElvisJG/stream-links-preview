@@ -121,6 +121,8 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+/* General Styles */
 .page {
   display: flex;
   flex-direction: column;
@@ -173,50 +175,68 @@ button:hover {
   background-color: #442c72;
   border-radius: 0 12px 12px 0;
 }
-.bg-text {
-  font-size: 10rem;
-  color: #6441a550;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
 form h3 {
   color: #6441a5;
   margin-right: 2rem;
   font-size: 2rem;
 }
-.reset {
-  border-radius: 12px;
-}
-.reset:hover {
-  border-radius: 12px;
-}
+
+/* Preview Pane */
 .preview_pane {
   width: 100vw;
-  height: 75%;
+  height: 100%;
   display: grid;
-  gap: 1rem;
-  justify-items: center;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-auto-rows: 1fr;
+  grid-template-columns: auto 15% 15% 15%;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    "pane-latest pane pane2 pane3"
+    "pane-latest pane4 pane5 pane6";
+}
+.connected-to {
+  font-size: 2.5rem;
+  color: #a970ff;
+  float: right;
+  width: fit-content;
+}
+.pane-latest {
+  grid-area: pane-latest;
+  position: relative;
+}
+.pane:nth-of-type(1) {
+  grid-area: pane;
+}
+.pane:nth-of-type(2) {
+  grid-area: pane2;
+}
+.pane:nth-of-type(3) {
+  grid-area: pane3;
+}
+.pane:nth-of-type(4) {
+  grid-area: pane4;
+}
+.pane:nth-of-type(5) {
+  grid-area: pane5;
+}
+.pane:nth-of-type(6) {
+  grid-area: pane6;
 }
 .pane {
+  grid-area: pane;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #0f0f10;
-  min-width: 300px;
-  min-height: 300px;
   width: 100%;
   height: 100%;
+  border: 2px solid #442c72;
 }
 .pane a {
   width: 100%;
   min-width: 100%;
   min-height: 150px;
   height: 100%;
+  cursor: pointer;
 }
 .pane-image {
   background-repeat: no-repeat;
@@ -227,11 +247,27 @@ form h3 {
   width: 100%;
 }
 .pane-info {
-  height: 50%;
+  height: 20%;
+  background: red;
+}
+.pane-info-latest {
+  position: absolute;
+  bottom: 0;
+  font-size: 3rem;
+  background: red;
+  width: 100%;
 }
 .pane-title {
   font-size: 1.5rem;
   text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pane-title:hover {
+  overflow: visible;
+}
+.pane-info-latest .pane-title {
+  font-size: 2.5rem;
 }
 .collapsable {
   text-align: center;
