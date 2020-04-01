@@ -101,4 +101,16 @@
     }
 
 
-        
+// useEffect(() => {
+//   const latest = mockdata[0];
+//   setLatest(l => l.concat(mockdata[0]));
+//   console.log(latest);
+//   if (latest.length > 1) {
+//     setMeta(m => m.concat(latest.shift()));
+//   }
+//   if (meta.length > 7) {
+//     meta.shift();
+//   }
+// }, []);
+
+// const handleMetaData = meta => setLatest(m => m.concat(meta));
