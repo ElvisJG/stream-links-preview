@@ -6,6 +6,7 @@ const PaneGroup = ({ metaData }) => {
     <div className="pane-group">
       {metaData.map(meta => {
         const { data } = meta;
+        console.log("meta inside pane-group", data, meta);
         return <Pane meta={data} key={data.ogUrl} />;
       })}
     </div>

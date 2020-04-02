@@ -19,21 +19,26 @@ const App = () => {
     reset("");
   };
 
-  const handleMetaData = incomingMetaData => {
-    setLatest([...latest, incomingMetaData]);
-    if (latest.length > 1) {
-      setMeta(meta => meta.concat(latest.shift()));
-    }
-    if (meta.length > 7) {
-      meta.shift();
-    }
-  };
-
+  const handleMetaData = md => setLatest(prev => prev.concat(md));
   useEffect(() => {
     io("http://localhost:4321").on("message", metaData => {
       handleMetaData(metaData);
     });
   }, []);
+
+  useEffect(() => {
+    if (latest.length > 1) {
+      setMeta(prev => prev.concat(latest.shift()));
+    }
+    console.log("latest after logic", latest);
+  }, [latest]);
+
+  useEffect(() => {
+    if (meta.length > 7) {
+      setMeta(prev => prev.shift());
+    }
+    console.log("meta after logic", meta);
+  }, [meta]);
 
   return (
     <div className="app">
@@ -44,7 +49,7 @@ const App = () => {
           <button type="submit">Submit</button>
         </form>
       </div>
-      {!stream.length >= 1 && <ConnectedTo stream={stream} />}
+      {stream.length >= 1 && <ConnectedTo stream={stream} />}
       <Preview meta={meta} stream={stream} latest={latest} />
     </div>
   );
