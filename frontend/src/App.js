@@ -6,8 +6,8 @@ import ConnectedTo from "./components/ConnectedTo";
 
 const App = () => {
   const [stream, setStream] = useState([]);
+  const [latest, setLatest] = useState(null);
   const [meta, setMeta] = useState([]);
-  const [latest, setLatest] = useState([]);
   const { handleSubmit, register, reset } = useForm();
 
   const onSubmit = values => {
@@ -18,27 +18,26 @@ const App = () => {
     }
     reset("");
   };
-
-  const handleMetaData = md => setLatest(prev => prev.concat(md));
+  const handleMetaData = md => {
+    setLatest(prevLatest => {
+      setMeta(prevArr => {
+        if (prevLatest) {
+          if (prevArr.length === 6) {
+            prevArr.shift();
+          }
+          return prevArr.concat(latest);
+        } else {
+          return prevArr;
+        }
+      });
+      return md;
+    });
+  };
   useEffect(() => {
     io("http://localhost:4321").on("message", metaData => {
       handleMetaData(metaData);
     });
   }, []);
-
-  useEffect(() => {
-    if (latest.length > 1) {
-      setMeta(prev => prev.concat(latest.shift()));
-    }
-    console.log("latest after logic", latest);
-  }, [latest]);
-
-  useEffect(() => {
-    if (meta.length > 7) {
-      setMeta(prev => prev.shift());
-    }
-    console.log("meta after logic", meta);
-  }, [meta]);
 
   return (
     <div className="app">

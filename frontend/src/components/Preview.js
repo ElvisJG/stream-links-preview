@@ -6,7 +6,7 @@ const Preview = ({ meta, latest }) => {
   return (
     <div className="pane-container">
       <div className="preview_pane">
-        <LatestPane metaData={latest} />
+        {latest && <LatestPane metaData={latest} />}
         <PaneGroup metaData={meta} />
       </div>
     </div>
