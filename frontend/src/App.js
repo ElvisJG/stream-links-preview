@@ -49,7 +49,7 @@ const App = () => {
           <button type="submit">Submit</button>
         </form>
       </div>
-      {stream.length >= 1 && <ConnectedTo stream={stream} />}
+      {stream && <ConnectedTo stream={stream} />}
       <Preview meta={meta} stream={stream} latest={latest} />
     </div>
   );
