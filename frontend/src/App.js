@@ -8,7 +8,7 @@ const App = () => {
   const [stream, setStream] = useState("");
   const [latest, setLatest] = useState();
   const [meta, setMeta] = useState([]);
-  const { handleSubmit, register, reset } = useForm();
+  const { handleSubmit, register } = useForm();
 
   const onSubmit = values => {
     setStream(values.channel);
@@ -18,7 +18,6 @@ const App = () => {
   };
 
   const handleMetaData = md => {
-    console.log("md wyd", md);
     setLatest(prevLatest => {
       setMeta(prevMeta => {
         if (prevLatest) {
@@ -35,7 +34,6 @@ const App = () => {
   };
   useEffect(() => {
     io("http://localhost:4321").on("message", metaData => {
-      console.log(metaData);
       handleMetaData(metaData);
     });
   }, []);
@@ -44,12 +42,15 @@ const App = () => {
     <div className="app">
       <div className="search">
         <h1>Twitch Links</h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="form">
-          <input name="channel" ref={register} />
-          <button type="submit">Submit</button>
-        </form>
+        {!stream ? (
+          <form onSubmit={handleSubmit(onSubmit)} className="form">
+            <input name="channel" ref={register} />
+            <button type="submit">Submit</button>
+          </form>
+        ) : (
+          <ConnectedTo stream={stream} />
+        )}
       </div>
-      {stream && <ConnectedTo stream={stream} />}
       <Preview meta={meta} stream={stream} latest={latest} />
     </div>
   );
