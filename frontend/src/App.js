@@ -20,14 +20,14 @@ const App = () => {
   };
   const handleMetaData = md => {
     setLatest(prevLatest => {
-      setMeta(prevArr => {
+      setMeta(prevMeta => {
         if (prevLatest) {
-          if (prevArr.length === 6) {
-            prevArr.shift();
+          if (prevMeta.length === 6) {
+            prevMeta.shift();
           }
-          return prevArr.concat(latest);
+          return prevMeta.concat(prevLatest);
         } else {
-          return prevArr;
+          return prevMeta;
         }
       });
       return md;
@@ -35,6 +35,7 @@ const App = () => {
   };
   useEffect(() => {
     io("http://localhost:4321").on("message", metaData => {
+      console.log(metaData);
       handleMetaData(metaData);
     });
   }, []);
