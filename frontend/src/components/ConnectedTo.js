@@ -3,12 +3,9 @@ import React from "react";
 const ConnectedTo = ({ stream }) => {
   return (
     <div className="connected-to">
-      {stream.length !== 0 && (
+      {stream && (
         <h3>
-          Connected to{" "}
-          {stream.map(s => (
-            <span key={s}>{`${s}! `}</span>
-          ))}
+          Connected to <span>{stream}!</span>
         </h3>
       )}
     </div>

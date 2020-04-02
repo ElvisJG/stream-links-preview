@@ -5,20 +5,20 @@ import Preview from "./components/Preview";
 import ConnectedTo from "./components/ConnectedTo";
 
 const App = () => {
-  const [stream, setStream] = useState([]);
-  const [latest, setLatest] = useState(null);
+  const [stream, setStream] = useState("");
+  const [latest, setLatest] = useState();
   const [meta, setMeta] = useState([]);
   const { handleSubmit, register, reset } = useForm();
 
   const onSubmit = values => {
-    if (stream.length > 2) return;
-    setStream(s => s.concat(values.channel));
+    setStream(values.channel);
     if (values.channel !== undefined) {
       io("http://localhost:4321").emit("channel", values.channel);
     }
-    reset("");
   };
+
   const handleMetaData = md => {
+    console.log("md wyd", md);
     setLatest(prevLatest => {
       setMeta(prevMeta => {
         if (prevLatest) {
