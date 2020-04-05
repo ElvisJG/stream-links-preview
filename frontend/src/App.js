@@ -1,42 +1,61 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useReducer } from "react";
 import io from "socket.io-client";
 import { useForm } from "react-hook-form";
 import Preview from "./components/Preview";
 import ConnectedTo from "./components/ConnectedTo";
 const socket = io("http://localhost:4321");
 
+const initialState = {
+  stream: undefined,
+  latest: undefined,
+  links: [],
+};
+
+function reducer(state = initialState, action = { type: "undefined" }) {
+  switch (action.type) {
+    case "SET_STREAM": {
+      return {
+        ...state,
+        stream: action.payload,
+      };
+    }
+    case "ADD_LINK": {
+      return {
+        ...state,
+        latest: action.payload,
+        links: state.latest ? [state.latest, ...state.links] : state.links,
+      };
+    }
+    default:
+      return state;
+  }
+}
+
 const App = () => {
-  const [stream, setStream] = useState("");
-  const [latest, setLatest] = useState();
-  const [meta, setMeta] = useState([]);
+  const [{ stream, latest, links: meta }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
+
   const { handleSubmit, register } = useForm();
 
   const onSubmit = (values) => {
-    setStream(values.channel);
-    if (values.channel !== undefined) {
-      io("http://localhost:4321").emit("channel", values.channel);
-    }
-  };
-
-  const handleMetaData = (md) => {
-    setLatest((prevLatest) => {
-      setMeta((prevMeta) => {
-        if (prevLatest) {
-          if (prevMeta.length === 6) {
-            prevMeta.shift();
-          }
-          return prevMeta.concat(prevLatest);
-        } else {
-          return prevMeta;
-        }
-      });
-      return md;
-    });
+    dispatch({ type: "SET_STREAM", payload: values.channel });
   };
 
   useEffect(() => {
-    socket.on("message", (metaData) => handleMetaData(metaData));
-    return () => socket.disconnect();
+    if (stream !== undefined) {
+      socket.emit("channel", stream);
+    }
+  }, [stream]);
+
+  const handleMetaData = (link) => {
+    dispatch({ type: "ADD_LINK", payload: link });
+  };
+
+  useEffect(() => {
+    socket.on("message", handleMetaData);
+    return () => socket.off(handleMetaData);
   }, []);
 
   return (

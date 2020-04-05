@@ -18,12 +18,12 @@ const io = socketIO(server);
 const client = new tmi.Client({
   identity: {
     username: process.env.USERNAME,
-    password: process.env.PASSWORD
-  }
+    password: process.env.PASSWORD,
+  },
 });
 
-io.on("connection", socket => {
-  socket.on("channel", channelName => {
+io.on("connection", (socket) => {
+  socket.on("channel", (channelName) => {
     client.connect().then(() => {
       client.join(channelName);
     });
