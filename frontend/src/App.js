@@ -3,6 +3,7 @@ import io from "socket.io-client";
 import { useForm } from "react-hook-form";
 import Preview from "./components/Preview";
 import ConnectedTo from "./components/ConnectedTo";
+const socket = io("http://localhost:4321");
 
 const App = () => {
   const [stream, setStream] = useState("");
@@ -10,16 +11,16 @@ const App = () => {
   const [meta, setMeta] = useState([]);
   const { handleSubmit, register } = useForm();
 
-  const onSubmit = values => {
+  const onSubmit = (values) => {
     setStream(values.channel);
     if (values.channel !== undefined) {
       io("http://localhost:4321").emit("channel", values.channel);
     }
   };
 
-  const handleMetaData = md => {
-    setLatest(prevLatest => {
-      setMeta(prevMeta => {
+  const handleMetaData = (md) => {
+    setLatest((prevLatest) => {
+      setMeta((prevMeta) => {
         if (prevLatest) {
           if (prevMeta.length === 6) {
             prevMeta.shift();
@@ -32,10 +33,10 @@ const App = () => {
       return md;
     });
   };
+
   useEffect(() => {
-    io("http://localhost:4321").on("message", metaData => {
-      handleMetaData(metaData);
-    });
+    socket.on("message", (metaData) => handleMetaData(metaData));
+    return () => socket.disconnect();
   }, []);
 
   return (
