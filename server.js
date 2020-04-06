@@ -15,12 +15,7 @@ app.use(morgan("tiny"));
 const server = http.createServer(app);
 const io = socketIO(server);
 
-const client = new tmi.Client({
-  identity: {
-    username: process.env.USERNAME,
-    password: process.env.PASSWORD,
-  },
-});
+const client = new tmi.Client();
 
 io.on("connection", (socket) => {
   socket.on("channel", (channelName) => {
