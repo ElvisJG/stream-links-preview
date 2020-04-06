@@ -1,10 +1,9 @@
-FROM node:lts-slim
-
-RUN mkdir -p /usr/src/app
-
-WORKDIR /usr/src/app
-
-EXPOSE 5000
-
-# You can change this
-CMD [ "npm", "run", "server" ]
+# Specify a base image
+FROM node:12.13.0-alpine AS alpine
+WORKDIR /app
+# Install dependencies
+COPY package.json .
+RUN npm install 
+COPY . .
+# Default command
+CMD ["npm", "run", "server"]
