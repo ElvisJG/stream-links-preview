@@ -5,9 +5,7 @@
   "main": "App.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon index.js",
-    "start": "cd frontend && react-scripts start",
-    "build": "cd frontend && react-scripts build"
+    "server": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
