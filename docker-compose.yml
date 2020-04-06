@@ -20,5 +20,5 @@ services:
     restart: on-failure
     container_name: stream-links-backend
     volumes:
-      - /app/node_modules # Inside the container, don't try to override this folder, just leave as is
-      - ./server:/app # Look at the server directory and copy everything into the app folder in the container
+      - /app/node_modules
+      - ./server:/app
