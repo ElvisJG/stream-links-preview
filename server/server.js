@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const http = require("http");
 const tmi = require("tmi.js");
 const socketIO = require("socket.io");
-const { urlRegex, handleEmit, BinarySearchTree } = require("../helpers");
+const { urlRegex, handleEmit, BinarySearchTree } = require("./helpers");
 
 const app = express();
 app.use(helmet());
