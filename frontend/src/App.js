@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import { useForm } from "react-hook-form";
 import Preview from "./components/Preview";
 import ConnectedTo from "./components/ConnectedTo";
-const socket = io("http://localhost:4321");
+const socket = io(`http://localhost:${process.env.PORT || 4321}`);
 
 const initialState = {
   stream: undefined,
